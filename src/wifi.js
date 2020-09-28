@@ -7,6 +7,7 @@ var linuxDisconnect = require('./linux-disconnect');
 var linuxDelete = require('./linux-delete');
 var linuxGetCurrentConnections = require('./linux-current-connections');
 var linuxScan = require('./linux-scan.js');
+var linuxRescan = require('./linux-rescan.js');
 var macConnect = require('./mac-connect.js');
 var macScan = require('./mac-scan.js');
 var macDelete = require('./mac-delete');
@@ -29,6 +30,9 @@ function init(options) {
   var scan = function() {
     throw new Error('ERROR : not available for this OS');
   };
+  var rescan = function() {
+    throw new Error('ERROR : not available for this OS');
+  };
   var connect = function() {
     throw new Error('ERROR : not available for this OS');
   };
@@ -46,6 +50,7 @@ function init(options) {
     case 'linux':
       connect = linuxConnect(config);
       scan = linuxScan(config);
+      rescan = linuxRescan(config);
       disconnect = linuxDisconnect(config);
       deleteConnection = linuxDelete(config);
       getCurrentConnections = linuxGetCurrentConnections(config);
@@ -66,6 +71,7 @@ function init(options) {
       throw new Error('ERROR : UNRECOGNIZED OS');
   }
   exports.scan = scan;
+  exports.rescan = rescan;
   exports.connect = connect;
   exports.disconnect = disconnect;
   exports.deleteConnection = deleteConnection;
@@ -74,6 +80,10 @@ function init(options) {
 
 exports.init = init;
 exports.scan = function() {
+  throw new Error('ERROR : use init before');
+};
+
+exports.rescan = function() {
   throw new Error('ERROR : use init before');
 };
 

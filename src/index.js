@@ -15,7 +15,9 @@ const init = newConfig => {
   };
 };
 
-const notAvailable = () => throw new Error('ERROR : not available for this OS');
+const notAvailable = () => {
+   throw new Error('ERROR : not available for this OS');
+}
 
 const scan = () => {
   if (!platform().scan) {
@@ -29,6 +31,19 @@ const scan = () => {
 
   return promiser(scanWifi)(config)();
 };
+
+const rescan = () => {
+   if (!platform().rescan) {
+     notAvailable();
+   }
+ 
+   const { command } = platform().rescan;
+ 
+   const rescanWifi = config =>
+     execute(command(config));
+ 
+   return promiser(rescanWifi)(config)();
+ };
 
 const connect = accessPoint => {
   if (!platform().connect) {
@@ -46,5 +61,6 @@ const connect = accessPoint => {
 module.exports = {
   init,
   scan,
+  rescan,
   connect
 };
